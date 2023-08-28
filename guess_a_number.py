@@ -41,7 +41,7 @@ async def cmd_stat(message: Message):
                          f'а вам нужно его угадать\nУ вас {ATTEMPTS}'
                          f'попыток\n\nДоступные команды:\n/help - правила '
                          f'игры и список команд\n/cancel - выйти из игры\n'
-                         f'/start - посмотреть статистику\n\nДавай сыграем?')
+                         f'/stat - посмотреть статистику\n\nДавай сыграем?')
 
 
 # handler for "/stat" command
@@ -79,7 +79,7 @@ async def process_positive_answer(message: Message):
 
 
 # handler for processing negative answer
-@dp.message(F.text.lower().in_['нет', 'не', 'не хочу', 'не буду'])
+@dp.message(F.text.lower().in_(['нет', 'не', 'не хочу', 'не буду']))
 async def process_negative_answer(message: Message):
     if not user['in_game']:
         await message.answer('Жаль. Если захотите поиграть, напишите')
@@ -113,4 +113,15 @@ async def process_numbers_answers(message: Message):
         await message.answer('Мы еще не играем. Хотите сыграть?')
 
 
+# handler for any messages
+@dp.message()
+async def process_any_messages(message: Message):
+    if user['in_game']:
+        await message.answer('''Мы же с вами играем. Присылайте, пожалуйста, 
+                                числа от 1 до 100''')
+    else:
+        await message.answer('Я понимаю не все :) Хотите сыграть?')
 
+
+if __name__ == '__main__':
+    dp.run_polling(bot)
