@@ -122,5 +122,16 @@ async def process_number_answer(message: Message):
         await message.answer('Мы еще не играем. Хотите сыграть?')
 
 
+# handler for processing any other messages
+@dp.message()
+async def process_any_messages(message: Message):
+    if users[message.from_user.id]['in_game']:
+        await message.answer('Мы же с вами играем.'
+                             'Присылайте, пожалуйста, числа от 1 до 100')
+    else:
+        await message.answer('Я довольно ограниченный бот, давайте '
+                             'просто сыграем в игру?')
+
+
 if __name__ == '__main__':
     dp.run_polling(bot)
