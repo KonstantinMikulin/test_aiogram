@@ -1,6 +1,6 @@
 from aiogram import Bot, Dispatcher, F
-from aiogram.filters import Command, CommandStart
-from aiogram.types import Message, ContentType
+from aiogram.filters import Command, CommandStart, ChatMemberUpdatedFilter, KICKED, MEMBER
+from aiogram.types import Message, ContentType, ChatMemberUpdated
 
 import config
 
@@ -30,6 +30,16 @@ async def process_phot(message: Message):
                                 ContentType.TEXT}))
 async def process_vovite(message: Message):
     await message.answer('You send voice or video or text')
+
+
+@dp.my_chat_member(ChatMemberUpdatedFilter(member_status_changed=KICKED))
+async def process_user_blocked_bot(event: ChatMemberUpdated):
+    print(f'User {event.from_user.id} blocked bot')
+
+
+@dp.my_chat_member(ChatMemberUpdatedFilter(member_status_changed=MEMBER))
+async def process_user_restart_bot(event: ChatMemberUpdated):
+    print(f'User {event.from_user.id} restart bot')
 
 
 async def process_any(message: Message):
