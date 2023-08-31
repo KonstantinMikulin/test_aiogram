@@ -1,13 +1,22 @@
 from aiogram import Bot, Dispatcher, F
-from aiogram.filters import Command, CommandStart, ChatMemberUpdatedFilter, KICKED, MEMBER
+from aiogram.filters import Command, CommandStart, ChatMemberUpdatedFilter, KICKED, MEMBER, BaseFilter
 from aiogram.types import Message, ContentType, ChatMemberUpdated
 
 import config
 
 BOT_TOKEN = config.TOKEN
+ADMIN_IDS = config.admin_ids
 
 bot: Bot = Bot(BOT_TOKEN)
 dp: Dispatcher = Dispatcher()
+
+
+class IsAdmin(BaseFilter):
+    def __init__(self, admin_ids: list[int]) -> None:
+        self.admin_ids = admin_ids
+
+    async def __call__(self, message: Message) -> bool:
+        return message.from_user.id in self.admin_ids
 
 
 @dp.message(CommandStart())
