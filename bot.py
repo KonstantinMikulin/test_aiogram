@@ -24,15 +24,24 @@ class NumbersInMessage(BaseFilter):
             if normalized_word.isdigit():
                 numbers.append(int(normalized_word))
 
-            if numbers:
-                return {'numbers': numbers}
+        if numbers:
+            return {'numbers': numbers}
 
         return False
 
 
-@dp.message(F.text.lower().startwith('найди числа'), NumbersInMessage)
-async def process_if_numbers(message: Message, numbers: list[int]) -> None:
+@dp.message(F.text.lower().startswith('найди числа'),
+            NumbersInMessage())
+# Помимо объекта типа Message, принимаем в хэндлер список чисел из фильтра
+async def process_if_numbers(message: Message, numbers: list[int]):
+    await message.answer(
+            text=f'Нашел: {", ".join(str(num) for num in numbers)}')
 
+
+@dp.message(F.text.lower().startswith('найди числа'))
+async def process_if_not_numbers(message: Message):
+    await message.answer(
+            text='Не нашел что-то :(')
 
 
 if __name__ == '__main__':
