@@ -32,7 +32,6 @@ class NumbersInMessage(BaseFilter):
 
 @dp.message(F.text.lower().startswith('найди числа'),
             NumbersInMessage())
-# Помимо объекта типа Message, принимаем в хэндлер список чисел из фильтра
 async def process_if_numbers(message: Message, numbers: list[int]):
     await message.answer(
             text=f'Нашел: {", ".join(str(num) for num in numbers)}')
