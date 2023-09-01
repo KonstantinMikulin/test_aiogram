@@ -1,64 +1,38 @@
 from aiogram import Bot, Dispatcher, F
-from aiogram.filters import Command, CommandStart, ChatMemberUpdatedFilter, KICKED, MEMBER, BaseFilter
-from aiogram.types import Message, ContentType, ChatMemberUpdated
+from aiogram.filters import Command, CommandStart, BaseFilter
+from aiogram.types import Message
 
 import config
 
 BOT_TOKEN = config.TOKEN
-ADMIN_IDS = config.admin_ids
 
 bot: Bot = Bot(BOT_TOKEN)
 dp: Dispatcher = Dispatcher()
 
 
-class IsAdmin(BaseFilter):
-    def __init__(self, admin_ids: list[int]) -> None:
-        self.admin_ids = admin_ids
-
-    async def __call__(self, message: Message) -> bool:
-        return message.from_user.id in self.admin_ids
-
-
-@dp.message(IsAdmin(config.admin_ids))
-async def answer_if_admin(message: Message) -> None:
-    await message.answer('You are admin')
-
-
 @dp.message(CommandStart())
-async def cmd_start(message: Message):
-    await message.answer('Hello hello')
+async def cmd_start(message: Message) -> None:
+    await message.answer('Hello hello!')
 
 
-@dp.message(Command(commands=['help']))
-async def cmd_help(message: Message):
-    await message.answer('I can do some')
+class NumbersInMessage(BaseFilter):
+    async def __call__(self, message: Message) -> bool | dict[str, list[int]]:
+        numbers = []
+
+        for word in message.text.split():
+            normalized_word = word.replace('.', '').replace(',', '').strip()
+            if normalized_word.isdigit():
+                numbers.append(int(normalized_word))
+
+            if numbers:
+                return {'numbers': numbers}
+
+        return False
 
 
-# @dp.message(F.photo)
-# async def process_phot(message: Message):
-#     await message.answer('You send photo')
+@dp.message(F.text.lower().startwith('найди числа'), NumbersInMessage)
+async def process_if_numbers(message: Message, numbers: list[int]) -> None:
 
-
-# @dp.message(F.content_type.in_({ContentType.VOICE,
-#                                 ContentType.VIDEO,
-#                                 ContentType.TEXT}))
-# async def process_vovite(message: Message):
-#     await message.answer('You send voice or video or text')
-
-
-@dp.my_chat_member(ChatMemberUpdatedFilter(member_status_changed=KICKED))
-async def process_user_blocked_bot(event: ChatMemberUpdated):
-    print(f'User {event.from_user.id} blocked bot')
-
-
-@dp.my_chat_member(ChatMemberUpdatedFilter(member_status_changed=MEMBER))
-async def process_user_restart_bot(event: ChatMemberUpdated):
-    print(f'User {event.from_user.id} restart bot')
-
-
-@dp.message()
-async def process_any(message: Message):
-    await message.answer('You are not admin and I do not understand')
 
 
 if __name__ == '__main__':

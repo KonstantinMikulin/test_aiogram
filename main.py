@@ -1,26 +1,65 @@
-import requests
-import time
+from aiogram import Bot, Dispatcher, F
+from aiogram.filters import Command, CommandStart, ChatMemberUpdatedFilter, KICKED, MEMBER, BaseFilter
+from aiogram.types import Message, ContentType, ChatMemberUpdated
+
 import config
 
-API_URL = 'https://api.telegram.org/bot'
-BOT_TOKEN: str = config.TOKEN
-offset: int = -2
-timeout: int = 10
-updates: dict
+BOT_TOKEN = config.TOKEN
+ADMIN_IDS = config.admin_ids
+
+bot: Bot = Bot(BOT_TOKEN)
+dp: Dispatcher = Dispatcher()
 
 
-def do_something() -> None:
-    print('Was update')
+class IsAdmin(BaseFilter):
+    def __init__(self, admin_ids: list[int]) -> None:
+        self.admin_ids = admin_ids
+
+    async def __call__(self, message: Message) -> bool:
+        return message.from_user.id in self.admin_ids
 
 
-while True:
-    start_time = time.time()
-    updates = requests.get(f'{API_URL}{BOT_TOKEN}/getUpdates?offset={offset + 1}&timeout={timeout}').json()
+@dp.message(IsAdmin(config.admin_ids))
+async def answer_if_admin(message: Message) -> None:
+    await message.answer('You are admin')
 
-    if updates['result']:
-        for result in updates['result']:
-            offset = result['update_id']
-            do_something()
 
-    end_time = time.time()
-    print(f'Update`s time to Telegram Bot API: {end_time - start_time}')
+@dp.message(CommandStart())
+async def cmd_start(message: Message):
+    await message.answer('Hello hello')
+
+
+@dp.message(Command(commands=['help']))
+async def cmd_help(message: Message):
+    await message.answer('I can do some')
+
+
+# @dp.message(F.photo)
+# async def process_phot(message: Message):
+#     await message.answer('You send photo')
+
+
+# @dp.message(F.content_type.in_({ContentType.VOICE,
+#                                 ContentType.VIDEO,
+#                                 ContentType.TEXT}))
+# async def process_vovite(message: Message):
+#     await message.answer('You send voice or video or text')
+
+
+@dp.my_chat_member(ChatMemberUpdatedFilter(member_status_changed=KICKED))
+async def process_user_blocked_bot(event: ChatMemberUpdated):
+    print(f'User {event.from_user.id} blocked bot')
+
+
+@dp.my_chat_member(ChatMemberUpdatedFilter(member_status_changed=MEMBER))
+async def process_user_restart_bot(event: ChatMemberUpdated):
+    print(f'User {event.from_user.id} restart bot')
+
+
+@dp.message()
+async def process_any(message: Message):
+    await message.answer('You are not admin and I do not understand')
+
+
+if __name__ == '__main__':
+    dp.run_polling(bot)
