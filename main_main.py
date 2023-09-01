@@ -4,7 +4,7 @@ from functions import get_double_number
 from data import my_dict
 from classes import *
 
-print('This is main.py file')
+print('This is main_main.py file')
 
 new_variable: int = 15
 
