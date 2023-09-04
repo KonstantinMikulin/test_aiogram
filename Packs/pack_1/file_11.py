@@ -1,10 +1,5 @@
-print('This is file', __name__)
-
-from .file_12 import num
+a: int = 42
 
 
-def some_func(n: int) -> float:
-    return (n + n) / n ** n
-
-
-result = some_func(num)
+def func_1(n: int) -> int:
+    return n * n
