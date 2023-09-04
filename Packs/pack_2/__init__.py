@@ -1,3 +1,3 @@
-print('This is file __init__.py for pack "pack_2". Its name is ', __name__)
+print('This is file __init__.py for "pack_2". Its name is', __name__)
 
-import pack_2.file_21
+from . import file_21

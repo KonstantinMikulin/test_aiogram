@@ -1,4 +1,4 @@
-print('This is file ', __name__)
+print('This is file', __name__)
 
 from ..file_21 import another_some_func
 from file_0 import some_var

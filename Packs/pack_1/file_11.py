@@ -1,4 +1,4 @@
-print('This is file ', __name__)
+print('This is file', __name__)
 
 from .file_12 import num
 
