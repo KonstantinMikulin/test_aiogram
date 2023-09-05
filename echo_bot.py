@@ -2,9 +2,8 @@ from aiogram import Bot, Dispatcher, F
 from aiogram.filters import Command
 from aiogram.types import Message
 
-import config
 
-API_TOKEN: str = config.TOKEN
+API_TOKEN: str =
 
 bot: Bot = Bot(token=API_TOKEN)
 dp: Dispatcher = Dispatcher()
