@@ -5,10 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="20d5114b-6985-46c8-9642-7034b4f70c5b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/test_bot_aiogram/config_data/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/echo_bot.py" beforeDir="false" afterPath="$PROJECT_DIR$/echo_bot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test_bot_aiogram/.env" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/test_bot_aiogram/bot.py" beforeDir="false" afterPath="$PROJECT_DIR$/test_bot_aiogram/bot.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -205,5 +202,8 @@
       <updated>1692884246472</updated>
     </task>
     <servers />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName=".env" />
   </component>
 </project>

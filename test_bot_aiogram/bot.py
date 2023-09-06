@@ -3,7 +3,7 @@ from aiogram.filters import Command
 from aiogram.types import Message
 from config_data.config import load_config
 
-config = load_config('C:\\Users\\user\\PycharmProjects\\test_aiogram\\test_bot_aiogram\\config_data\\.env')
+config = load_config('C:/Users/user/PycharmProjects/test_aiogram/test_bot_aiogram/config_data/.env')
 
 API_TOKEN: str = config.tg_bot.token
 
