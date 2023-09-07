@@ -1,46 +1,36 @@
 from aiogram import Bot, Dispatcher, F
-from aiogram.filters import Command, CommandStart, BaseFilter
-from aiogram.types import Message
+from aiogram.filters import CommandStart
+from aiogram.types import Message, KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove
 
-import config
+from config import TOKEN
 
-BOT_TOKEN = config.TOKEN
+API_TOKEN = TOKEN
 
-bot: Bot = Bot(BOT_TOKEN)
+bot: Bot = Bot(API_TOKEN)
 dp: Dispatcher = Dispatcher()
+
+button_1: KeyboardButton = KeyboardButton(text='Dogs 🦮')
+button_2: KeyboardButton = KeyboardButton(text='Pickles 🥒')
+
+keyboard: ReplyKeyboardMarkup = ReplyKeyboardMarkup(keyboard=[[button_1, button_2]])
 
 
 @dp.message(CommandStart())
-async def cmd_start(message: Message) -> None:
-    await message.answer('Hello hello!')
+async def cmd_start(message: Message):
+    await message.answer('Who is worse?',
+                         reply_markup=keyboard)
 
 
-class NumbersInMessage(BaseFilter):
-    async def __call__(self, message: Message) -> bool | dict[str, list[int]]:
-        numbers = []
-
-        for word in message.text.split():
-            normalized_word = word.replace('.', '').replace(',', '').strip()
-            if normalized_word.isdigit():
-                numbers.append(int(normalized_word))
-
-        if numbers:
-            return {'numbers': numbers}
-
-        return False
+@dp.message(F.text == 'Dogs 🦮')
+async def process_dogs_answer(message: Message):
+    await message.answer('Yes! dogs are worst!',
+                         reply_markup=ReplyKeyboardRemove())
 
 
-@dp.message(F.text.lower().startswith('найди числа'),
-            NumbersInMessage())
-async def process_if_numbers(message: Message, numbers: list[int]):
-    await message.answer(
-            text=f'Нашел: {", ".join(str(num) for num in numbers)}')
-
-
-@dp.message(F.text.lower().startswith('найди числа'))
-async def process_if_not_numbers(message: Message):
-    await message.answer(
-            text='Не нашел что-то :(')
+@dp.message(F.text == 'Pickles 🥒')
+async def process_pickles_answer(message: Message):
+    await message.answer('Exactly! Pickles are worst!',
+                         reply_markup=ReplyKeyboardRemove())
 
 
 if __name__ == '__main__':
