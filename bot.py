@@ -19,10 +19,8 @@ geo_btn: KeyboardButton = KeyboardButton(text='Send location',
                                          request_location=True)
 poll_btn: KeyboardButton = KeyboardButton(text='Make poll',
                                           request_poll=KeyboardButtonPollType())
-
 web_app_btn: KeyboardButton = KeyboardButton(text='Start web app',
                                              web_app=WebAppInfo(url="https://stepik.org/"))
-
 web_app_keyboard: ReplyKeyboardMarkup = ReplyKeyboardMarkup(keyboard=[[web_app_btn]],
                                                             resize_keyboard=True)
 
@@ -30,6 +28,13 @@ kb_builder.row(contact_btn, geo_btn, poll_btn, width=1)
 
 keyboard: ReplyKeyboardMarkup = kb_builder.as_markup(resize_keyboard=True,
                                                      one_time_keyboard=True)
+
+btn_1: KeyboardButton = KeyboardButton(text='Button 1')
+btn_2: KeyboardButton = KeyboardButton(text='Button 2')
+
+placeholder_example_kb: ReplyKeyboardMarkup = ReplyKeyboardMarkup(keyboard=[[btn_1, btn_2]],
+                                                                  resize_keyboard=True,
+                                                                  input_field_placeholder='Press button 1')
 
 
 @dp.message(CommandStart())
@@ -42,6 +47,12 @@ async def cmd_start(message: Message):
 async def cmd_web_app(message: Message):
     await message.answer(text='Web app test',
                          reply_markup=web_app_keyboard)
+
+
+@dp.message(Command(commands=['placeholder']))
+async def cmd_placeholder(message: Message):
+    await message.answer(text='Placeholder test',
+                         reply_markup=placeholder_example_kb)
 
 
 if __name__ == '__main__':
