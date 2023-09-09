@@ -11,7 +11,7 @@ def _normalize_user_answer(user_answer: str) -> str:
     for key in LEXICON_RU:
         if LEXICON_RU[key] == user_answer:
             break
-        return key
+    return key
 
 
 def get_winner(user_choice: str, bot_choice: str) -> str:
@@ -20,7 +20,7 @@ def get_winner(user_choice: str, bot_choice: str) -> str:
                              'scissors': 'paper',
                              'peper': 'rock'}
     if user_choice == bot_choice:
-        return 'nobody_win'
+        return 'nobody_won'
     elif rules[user_choice] == bot_choice:
         return 'user_won'
     else:
