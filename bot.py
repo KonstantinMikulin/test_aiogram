@@ -1,5 +1,6 @@
 from aiogram import Bot, Dispatcher
-from aiogram.types import BotCommand
+from aiogram.filters import CommandStart
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 
 import config
 
@@ -8,20 +9,23 @@ API_TOKEN: str = config.TOKEN
 bot: Bot = Bot(API_TOKEN)
 dp: Dispatcher = Dispatcher()
 
+url_button_1: InlineKeyboardButton = InlineKeyboardButton(
+    text='YouTube',
+    url='https://www.youtube.com/')
+url_button_2: InlineKeyboardButton = InlineKeyboardButton(
+    text='Stepik.org',
+    url='https://stepik.org/learn')
 
-async def set_main_menu(bot: Bot):
-    main_menu_commands = [BotCommand(command='/help',
-                                     description='About bot'),
-                          BotCommand(command='/support',
-                                     description='Command for support'),
-                          BotCommand(command='/contacts',
-                                     description='Get contacts'),
-                          BotCommand(command='/payments',
-                                     description='How to pay')]
+keyboard: InlineKeyboardMarkup = InlineKeyboardMarkup(
+    inline_keyboard=[[url_button_1],
+                     [url_button_2]])
 
-    await bot.set_my_commands(main_menu_commands)
+
+@dp.message(CommandStart())
+async def process_start_cmd(message: Message):
+    await message.answer(text='These are inline buttons',
+                         reply_markup=keyboard)
 
 
 if __name__ == '__main__':
-    dp.startup.register(set_main_menu)
     dp.run_polling(bot)
