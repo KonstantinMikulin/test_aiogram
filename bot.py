@@ -9,16 +9,25 @@ API_TOKEN: str = config.TOKEN
 bot: Bot = Bot(API_TOKEN)
 dp: Dispatcher = Dispatcher()
 
-url_button_1: InlineKeyboardButton = InlineKeyboardButton(
-    text='YouTube',
-    url='https://www.youtube.com/')
-url_button_2: InlineKeyboardButton = InlineKeyboardButton(
-    text='Stepik.org',
-    url='https://stepik.org/learn')
+group_name = 'aiogram_stepik_course'
+url_btn_1: InlineKeyboardButton = InlineKeyboardButton(
+    text='Группа "Телеграм-боты на AIOgram"',
+    url=f"tg://resolve?domain={group_name}")
+
+user_id = 828900493
+url_btn_2: InlineKeyboardButton = InlineKeyboardButton(
+    text='Автор курса на Степике по телеграм-ботам',
+    url=f'tg://user?id={user_id}')
+
+channel_name = 'toBeAnMLspecialist'
+url_btn_3: InlineKeyboardButton = InlineKeyboardButton(
+    text='Канал "Стать специалистом по машинному обучению"',
+    url=f'https://t.me/{channel_name}')
 
 keyboard: InlineKeyboardMarkup = InlineKeyboardMarkup(
-    inline_keyboard=[[url_button_1],
-                     [url_button_2]])
+    inline_keyboard=[[url_btn_1],
+                     [url_btn_2],
+                     [url_btn_3]])
 
 
 @dp.message(CommandStart())
