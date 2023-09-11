@@ -1,8 +1,6 @@
-from pprint import pprint
-
-from aiogram import Bot, Dispatcher
+from aiogram import Bot, Dispatcher, F
 from aiogram.filters import CommandStart
-from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 
 import config
 
@@ -24,6 +22,18 @@ keyboard = InlineKeyboardMarkup(inline_keyboard=[[big_button_1],
 async def process_start_cmd(message: Message):
     await message.answer(text='Press any inline button',
                          reply_markup=keyboard)
+
+
+@dp.callback_query(F.data == 'big_button_1_pressed')
+async def process_button_1_press(callback: CallbackQuery):
+    await callback.message.edit_text(text='BIG BUTTON 1 was pressed',
+                                     reply_markup=callback.message.reply_markup)
+
+
+@dp.callback_query(F.data == 'big_button_2_pressed')
+async def process_button_2_press(callback: CallbackQuery):
+    await callback.message.edit_text(text='BIG BUTTON 2 was pressed',
+                                     reply_markup=callback.message.reply_markup)
 
 
 if __name__ == '__main__':
