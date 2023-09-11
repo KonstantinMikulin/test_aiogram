@@ -1,6 +1,9 @@
-from aiogram import Bot, Dispatcher, F
+from aiogram import Bot, Dispatcher
 from aiogram.filters import CommandStart
-from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
+from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.utils.keyboard import InlineKeyboardBuilder
+from lexion.lexicon import LEXICON, BUTTONS
+from keyboards.keyboards import create_inline_kb
 
 import config
 
@@ -9,36 +12,14 @@ API_TOKEN = config.TOKEN
 bot = Bot(API_TOKEN)
 dp = Dispatcher()
 
-big_button_1 = InlineKeyboardButton(text='BIG BUTTON 1',
-                                    callback_data='big_button_1_pressed')
-big_button_2 = InlineKeyboardButton(text='BIG BUTTON 2',
-                                    callback_data='big_button_2_pressed')
 
-keyboard = InlineKeyboardMarkup(inline_keyboard=[[big_button_1],
-                                                 [big_button_2]])
-
-
-@dp.message(CommandStart)
+@dp.message(CommandStart())
 async def process_start_cmd(message: Message):
-    await message.answer(text='Press any inline button',
-                         reply_markup=keyboard)
-
-
-@dp.callback_query(F.data == 'big_button_1_pressed')
-async def process_button_1_press(callback: CallbackQuery):
-    if callback.message.text != 'BIG BUTTON 1 was pressed':
-        await callback.message.edit_text(text='BIG BUTTON 1 was pressed',
-                                         reply_markup=callback.message.reply_markup)
-    await callback.answer(text='You pressed button 1',
-                          show_alert=True)
-
-
-@dp.callback_query(F.data == 'big_button_2_pressed')
-async def process_button_2_press(callback: CallbackQuery):
-    if callback.message.text != 'BIG BUTTON 2 was pressed':
-        await callback.message.edit_text(text='BIG BUTTON 2 was pressed',
-                                         reply_markup=callback.message.reply_markup)
-    await callback.answer(text='You pressed button 2')
+    keyboard = create_inline_kb(2, 'but_1', 'but_2', 'but_3')
+    await message.answer(text='Это инлайн-клавиатура, сформированная функцией '
+                              '<code>create_inline_kb</code>',
+                         reply_markup=keyboard,
+                         parse_mode='HTML')
 
 
 if __name__ == '__main__':
