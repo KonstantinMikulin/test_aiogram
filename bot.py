@@ -1,9 +1,8 @@
 from aiogram import Bot, Dispatcher
 from aiogram.filters import CommandStart
-from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
-from aiogram.utils.keyboard import InlineKeyboardBuilder
-from lexion.lexicon import LEXICON, BUTTONS
+from aiogram.types import Message
 from keyboards.keyboards import create_inline_kb
+from lexion.lexicon import LEXICON, BUTTONS
 
 import config
 
@@ -15,7 +14,7 @@ dp = Dispatcher()
 
 @dp.message(CommandStart())
 async def process_start_cmd(message: Message):
-    keyboard = create_inline_kb(2, 'but_1', 'but_2', 'but_3')
+    keyboard = create_inline_kb(2, **BUTTONS)
     await message.answer(text='Это инлайн-клавиатура, сформированная функцией '
                               '<code>create_inline_kb</code>',
                          reply_markup=keyboard,
