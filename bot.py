@@ -26,14 +26,18 @@ async def process_start_cmd(message: Message):
 
 @dp.callback_query(F.data == 'big_button_1_pressed')
 async def process_button_1_press(callback: CallbackQuery):
-    await callback.message.edit_text(text='BIG BUTTON 1 was pressed',
-                                     reply_markup=callback.message.reply_markup)
+    if callback.message.text != 'BIG BUTTON 1 was pressed':
+        await callback.message.edit_text(text='BIG BUTTON 1 was pressed',
+                                         reply_markup=callback.message.reply_markup)
+    await callback.answer()
 
 
 @dp.callback_query(F.data == 'big_button_2_pressed')
 async def process_button_2_press(callback: CallbackQuery):
-    await callback.message.edit_text(text='BIG BUTTON 2 was pressed',
-                                     reply_markup=callback.message.reply_markup)
+    if callback.message.text != 'BIG BUTTON 2 was pressed':
+        await callback.message.edit_text(text='BIG BUTTON 2 was pressed',
+                                         reply_markup=callback.message.reply_markup)
+    await callback.answer()
 
 
 if __name__ == '__main__':
