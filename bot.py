@@ -1,38 +1,28 @@
+from pprint import pprint
+
 from aiogram import Bot, Dispatcher
 from aiogram.filters import CommandStart
-from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
+from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 
 import config
 
-API_TOKEN: str = config.TOKEN
+API_TOKEN = config.TOKEN
 
-bot: Bot = Bot(API_TOKEN)
-dp: Dispatcher = Dispatcher()
+bot = Bot(API_TOKEN)
+dp = Dispatcher()
 
-group_name = 'aiogram_stepik_course'
-url_btn_1: InlineKeyboardButton = InlineKeyboardButton(
-    text='Группа "Телеграм-боты на AIOgram"',
-    url=f"tg://resolve?domain={group_name}")
+big_button_1 = InlineKeyboardButton(text='BIG BUTTON 1',
+                                    callback_data='big_button_1_pressed')
+big_button_2 = InlineKeyboardButton(text='BIG BUTTON 2',
+                                    callback_data='big_button_2_pressed')
 
-user_id = 828900493
-url_btn_2: InlineKeyboardButton = InlineKeyboardButton(
-    text='Автор курса на Степике по телеграм-ботам',
-    url=f'tg://user?id={user_id}')
-
-channel_name = 'toBeAnMLspecialist'
-url_btn_3: InlineKeyboardButton = InlineKeyboardButton(
-    text='Канал "Стать специалистом по машинному обучению"',
-    url=f'https://t.me/{channel_name}')
-
-keyboard: InlineKeyboardMarkup = InlineKeyboardMarkup(
-    inline_keyboard=[[url_btn_1],
-                     [url_btn_2],
-                     [url_btn_3]])
+keyboard = InlineKeyboardMarkup(inline_keyboard=[[big_button_1],
+                                                 [big_button_2]])
 
 
-@dp.message(CommandStart())
+@dp.message(CommandStart)
 async def process_start_cmd(message: Message):
-    await message.answer(text='These are inline buttons',
+    await message.answer(text='Press any inline button',
                          reply_markup=keyboard)
 
 
