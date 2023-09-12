@@ -57,3 +57,41 @@ async def process_bookmarks_cmd(message: Message):
         await message.answer(text=LEXICON['no_bookmarks'])
 
 
+@router.callback_query(F.data == 'forward')
+async def process_forward_press(callback: CallbackQuery):
+    if users_db[callback.from_user.id]['page'] < len(book):
+        users_db[callback.from_user.id]['page'] += 1
+        text = book[users_db[callback.from_user.id]['page']]
+        await callback.message.edit_text(text=text,
+                                         reply_markup=create_pagination_keyboard(
+                                             'backward',
+                                             f'{users_db[callback.from_user.id]["page"]}/{len(book)}',
+                                             'forward'))
+    await callback.answer()
+
+
+@router.callback_query(F.data == 'backward')
+async def process_backward_press(callback: CallbackQuery):
+    if users_db[callback.from_user.id]['page'] > 1:
+        users_db[callback.from_user.id]['page'] -= 1
+        text = book[users_db[callback.from_user.id]['page']]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
