@@ -76,22 +76,60 @@ async def process_backward_press(callback: CallbackQuery):
         users_db[callback.from_user.id]['page'] -= 1
         text = book[users_db[callback.from_user.id]['page']]
 
+        await callback.message.edit_text(text=text,
+                                         reply_markup=create_pagination_keyboard(
+                                             'backward',
+                                             f'{users_db[callback.from_user.id]["page"]}/{len(book)}',
+                                             'forward'
+                                         ))
+    await callback.answer()
 
 
+@router.callback_query(lambda x: '/' in x.data and x.data.replace('/', '').isdigit())
+async def process_page_press(callback: CallbackQuery):
+    users_db[callback.from_user.id]['bookmarks'].add(users_db[callback.from_user.id]['page'])
+
+    await callback.answer('Страница добавлена в закладки!')
 
 
+@router.callback_query(IsDigitCallbackData())
+async def process_bookmark_press(callback: CallbackQuery):
+    text = book[int(callback.data)]
+    users_db[callback.from_user.id]['page'] = int(callback.data)
+
+    await callback.message.edit_text(text=text,
+                                     reply_markup=create_pagination_keyboard(
+                                         'backward', f'{users_db[callback.from_user.id]["page"]}/{len(book)}',
+                                         'forward'
+                                     ))
+    await callback.answer()
 
 
+@router.callback_query(F.data == 'edit_bookmarks')
+async def process_edit_press(callback: CallbackQuery):
+    await callback.message.edit_text(text=LEXICON[callback.data],
+                                     reply_markup=create_edit_keyboard(
+                                         *users_db[callback.from_user.id]['bookmarks']
+                                     ))
+    await callback.answer()
 
 
+@router.callback_query(F.data == 'cancel')
+async def process_cancel_press(callback: CallbackQuery):
+    await callback.message.edit_text(text=LEXICON['cancel_text'])
+    await callback.answer()
 
 
+@router.callback_query(IsDelBookmarkCallbackData())
+async def process_del_bookmark_press(callback: CallbackQuery):
+    users_db[callback.from_user.id]['bookmarks'].remove(int(callback.data[:-3]))
 
+    if users_db[callback.from_user.id]['bookmarks']:
+        await callback.message.edit_text(text=LEXICON['/bookmarks'],
+                                         reply_markup=create_edit_keyboard(
+                                             *users_db[callback.from_user.id]['bookmarks']
+                                         ))
+    else:
+        await callback.message.edit_text(text=LEXICON['no_bookmarks'])
 
-
-
-
-
-
-
-
+    await callback.answer()
