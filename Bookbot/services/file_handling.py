@@ -2,7 +2,7 @@ import os
 import sys
 
 BOOK_PATH = 'C:/Users/user/PycharmProjects/test_aiogram/Bookbot/book/book.txt'
-PAGE_SIZE = 1050
+PAGE_SIZE = 800
 
 book: dict[int, str] = {}
 
