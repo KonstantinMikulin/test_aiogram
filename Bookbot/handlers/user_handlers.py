@@ -57,6 +57,7 @@ async def process_bookmarks_cmd(message: Message):
         await message.answer(text=LEXICON['no_bookmarks'])
 
 
+# TODO Проверить не нужно ли сюда дописать else, если это будет последняя страница?
 @router.callback_query(F.data == 'forward')
 async def process_forward_press(callback: CallbackQuery):
     if users_db[callback.from_user.id]['page'] < len(book):
@@ -70,6 +71,7 @@ async def process_forward_press(callback: CallbackQuery):
     await callback.answer()
 
 
+# TODO Нужно ли выводить какое-то сообщение, если после нажатия не происходит действие?
 @router.callback_query(F.data == 'backward')
 async def process_backward_press(callback: CallbackQuery):
     if users_db[callback.from_user.id]['page'] > 1:
