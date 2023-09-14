@@ -39,7 +39,7 @@ async def process_beginning_cmd(message: Message):
                              'forward'))
 
 
-# TODO Работает не правильно (?). Начинает не с той страницы (?). Проверить и исправить.
+# TODO: Done
 @router.message(Command(commands=['continue']))
 async def process_continue_cmd(message: Message):
     text = book[users_db[message.from_user.id]['page']]
@@ -50,7 +50,7 @@ async def process_continue_cmd(message: Message):
                              'forward'))
 
 
-# TODO: Не отображает страницу с закладками.
+# TODO: Done
 @router.message(Command(commands=['bookmarks']))
 async def process_bookmarks_cmd(message: Message):
     if users_db[message.from_user.id]['bookmarks']:
@@ -73,6 +73,9 @@ async def process_forward_press(callback: CallbackQuery):
                                              'backward',
                                              f'{users_db[callback.from_user.id]["page"]}/{len(book)}',
                                              'forward'))
+    else:
+        await callback.answer(text='This is last page')
+
     await callback.answer()
 
 
@@ -89,6 +92,9 @@ async def process_backward_press(callback: CallbackQuery):
                                              f'{users_db[callback.from_user.id]["page"]}/{len(book)}',
                                              'forward'
                                          ))
+    else:
+        await callback.answer(text='This is first page')
+
     await callback.answer()
 
 
