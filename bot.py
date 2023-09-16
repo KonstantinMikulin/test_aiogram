@@ -1,4 +1,4 @@
-from aiogram import Bot, Dispatcher
+from aiogram import Bot, Dispatcher, F
 from aiogram.filters import CommandStart
 from aiogram.filters.callback_data import CallbackData
 from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup, Message
@@ -25,7 +25,7 @@ button_1 = InlineKeyboardButton(text='Category 1',
 
 button_2 = InlineKeyboardButton(text='Category 2',
                                 callback_data=GoodsCallbackFactory(
-                                    category_id=1,
+                                    category_id=2,
                                     subcategory_id=0,
                                     item_id=0).pack())
 
@@ -38,10 +38,9 @@ async def process_start_cmd(message: Message):
                          reply_markup=markup)
 
 
-@dp.callback_query()
-async def process_any_inline_btn_press(callback: CallbackQuery):
-    print(callback.model_dump_json(indent=4, exclude_none=True))
-
+@dp.callback_query(GoodsCallbackFactory.filter(F.category_id == 1))
+async def process_category_press(callback: CallbackQuery, callback_data: GoodsCallbackFactory):
+    await callback.message.answer(text=callback_data.pack())
     await callback.answer()
 
 
