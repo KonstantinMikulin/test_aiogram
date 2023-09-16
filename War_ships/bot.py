@@ -100,7 +100,7 @@ async def process_category_press(callback: CallbackQuery,
     except TelegramBadRequest:
         pass
 
-    await callback.answer()
+    await callback.answer(answer)
 
 
 if __name__ == '__main__':
