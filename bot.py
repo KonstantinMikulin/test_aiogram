@@ -6,7 +6,7 @@ import config
 
 BOT_TOKEN = config.TOKEN
 
-bot = Bot(BOT_TOKEN)
+bot = Bot(BOT_TOKEN, parse_mode='HTML')
 dp = Dispatcher()
 
 
@@ -14,12 +14,12 @@ dp = Dispatcher()
 async def process_start_cmd(message: Message):
     await message.answer(
         text='Привет!\n\nЯ бот, демонстрирующий '
-             'как работает разметка. Отправь команду '
+             'как работает HTML-разметка. Отправь команду '
              'из списка ниже:\n\n'
-             '/html - пример разметки с помощью HTML\n'
-             '/markdownv2 - пример разметки с помощью MarkdownV2\n'
-             '/noformat - пример с разметкой, но без указания '
-             'параметра parse_mode'
+             '/bold - жирный текст\n'
+             '/italic - наклонный текст\n'
+             '/underline - подчеркнутый текст\n'
+             '/spoiler - спойлер'
     )
 
 
@@ -27,57 +27,56 @@ async def process_start_cmd(message: Message):
 async def process_help_cmd(message: Message):
     await message.answer(
         text='Я бот, демонстрирующий '
-             'как работает разметка. Отправь команду '
+             'как работает HTML-разметка. Отправь команду '
              'из списка ниже:\n\n'
-             '/html - пример разметки с помощью HTML\n'
-             '/markdownv2 - пример разметки с помощью MarkdownV2\n'
-             '/noformat - пример с разметкой, но без указания '
-             'параметра parse_mode'
+             '/bold - жирный текст\n'
+             '/italic - наклонный текст\n'
+             '/underline - подчеркнутый текст\n'
+             '/spoiler - спойлер'
     )
 
 
-@dp.message(Command(commands=['html']))
-async def process_html_cmd(message: Message):
+@dp.message(Command(commands=['bold']))
+async def process_bold_cmd(message: Message):
     await message.answer(
-        text='Это текст, демонстрирующий '
-             'как работает HTML-разметка:\n\n'
-             '<b>Это жирный текст</b>\n'
-             '<i>Это наклонный текст</i>\n'
-             '<u>Это подчеркнутый текст</u>\n'
-             '<span class="tg-spoiler">А это спойлер</span>\n\n'
+        text='<b>Это текст, демонстрирующий '
+             'как работает HTML-разметка, '
+             'делающая текст жирным.\n\n'
              'Чтобы еще раз посмотреть список доступных команд - '
-             'отправь команду /help',
-        parse_mode='HTML'
+             'отправь команду /help</b>'
     )
 
 
-@dp.message(Command(commands=['markdownv2']))
-async def process_markdownv2_cmd(message: Message):
+@dp.message(Command(commands=['italic']))
+async def process_italic_cmd(message: Message):
     await message.answer(
-        text='Это текст, демонстрирующий '
-             'как работает MarkdownV2\-разметка:\n\n'
-             '*Это жирный текст*\n'
-             '_Это наклонный текст_\n'
-             '__Это подчеркнутый текст__\n'
-             '||А это спойлер||\n\n'
-             'Чтобы еще раз посмотреть список доступных команд \- '
-             'отправь команду /help',
-        parse_mode='MarkdownV2'
-    )
-
-
-@dp.message(Command(commands=['noformat']))
-async def process_noformat_cmd(message: Message):
-    await message.answer(
-        text='Это текст, демонстрирующий '
-             'как отображается текст, если не указать '
-             'параметр parse_mode:\n\n'
-             '<b>Это мог бы быть жирный текст</b>\n'
-             '_Это мог бы быть наклонный текст_\n'
-             '<u>Это мог бы быть подчеркнутый текст</u>\n'
-             '||А это мог бы быть спойлер||\n\n'
+        text='<i>Это текст, демонстрирующий '
+             'как работает HTML-разметка, '
+             'делающая текст наклонным.\n\n'
              'Чтобы еще раз посмотреть список доступных команд - '
-             'отправь команду /help'
+             'отправь команду /help</i>'
+    )
+
+
+@dp.message(Command(commands=['underline']))
+async def process_underline_cmd(message: Message):
+    await message.answer(
+        text='<u>Это текст, демонстрирующий '
+             'как работает HTML-разметка, '
+             'делающая текст подчеркнутым.\n\n'
+             'Чтобы еще раз посмотреть список доступных команд - '
+             'отправь команду /help</u>'
+    )
+
+
+@dp.message(Command(commands=['spoiler']))
+async def process_spoiler_cmd(message: Message):
+    await message.answer(
+        text='<tg-spoiler>Это текст, демонстрирующий '
+             'как работает HTML-разметка, '
+             'убирающая текст под спойлер.\n\n'
+             'Чтобы еще раз посмотреть список доступных команд - '
+             'отправь команду /help</tg-spoiler>'
     )
 
 
