@@ -56,7 +56,7 @@ def get_field_kb(user_id: int) -> InlineKeyboardMarkup:
         for j in range(FIELD_SIZE):
             array_buttons[i].append(InlineKeyboardButton(
                 text=LEXICON[users[user_id]['field'][i][j]],
-                callback_data = FieldCallbackFactory(x=i, y=j).pack()
+                callback_data=FieldCallbackFactory(x=i, y=j).pack()
             ))
 
     markup = InlineKeyboardMarkup(inline_keyboard=array_buttons)
@@ -100,7 +100,7 @@ async def process_category_press(callback: CallbackQuery,
     except TelegramBadRequest:
         pass
 
-    await callback.answer(answer)
+    await callback.answer(text=answer)
 
 
 if __name__ == '__main__':
