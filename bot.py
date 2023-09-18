@@ -60,11 +60,11 @@ def get_markup(width: int, *args, **kwargs) -> InlineKeyboardMarkup:
 
 @dp.message(CommandStart())
 async def process_start_cmd(message: Message):
-    markup = get_markup(2, 'document')
+    markup = get_markup(2, 'video')
 
-    await message.answer_document(
-        document=LEXICON['document_id1'],
-        caption='This is doc 1',
+    await message.answer_video(
+        video=LEXICON['video_id1'],
+        caption='This is video 1',
         reply_markup=markup
     )
 
@@ -72,15 +72,15 @@ async def process_start_cmd(message: Message):
 @dp.callback_query(F.data.in_(
     ['text', 'audio', 'video', 'document', 'photo', 'voice']))
 async def process_button_press(callback: CallbackQuery):
-    markup = get_markup(2, 'document')
+    markup = get_markup(2, 'photo')
 
     try:
         await bot.edit_message_media(
             chat_id=callback.message.chat.id,
             message_id=callback.message.message_id,
-            media=InputMediaDocument(
-                media=LEXICON['document_id2'],
-                caption='This is doc 2'
+            media=InputMediaPhoto(
+                media=LEXICON['photo_id1'],
+                caption='This is photo 1'
             ),
             reply_markup=markup
         )
@@ -88,8 +88,9 @@ async def process_button_press(callback: CallbackQuery):
         await bot.edit_message_media(
             chat_id=callback.message.chat.id,
             message_id=callback.message.message_id,
-            media=InputMediaDocument(
-                media=LEXICON['document_id1']
+            media=InputMediaVideo(
+                media=LEXICON['video_id1'],
+                caption='This is video 1'
             ),
             reply_markup=markup
         )
