@@ -35,3 +35,43 @@ LEXICON: dict[str, str] = {
     'video_id1': config.videos[0],
     'video_id2': config.videos[1]
     }
+
+
+def get_markup(width: int, *args, **kwargs) -> InlineKeyboardMarkup:
+    kb_builder = InlineKeyboardBuilder()
+    buttons: list[InlineKeyboardButton] = []
+
+    if args:
+        for button in args:
+            buttons.append(InlineKeyboardButton(
+                text=LEXICON[button] if button in LEXICON else button,
+                callback_data=button
+            ))
+    if kwargs:
+        for button, text in kwargs.items():
+            buttons.append(InlineKeyboardButton(
+                text=text,
+                callback_data=button
+            ))
+    kb_builder.row(*buttons, width=width)
+
+    return kb_builder.as_markup()
+
+
+async def process_start_cmd(message: Message):
+    pass
+
+
+@dp.callback_query(F.data.in_(
+    [['text', 'audio', 'video', 'document', 'photo', 'voice']]))
+async def process_button_press(callback: CallbackQuery, bot: Bot):
+    pass
+
+
+@dp.message()
+async def send_echo(message: Message):
+    await message.answer(text='Say what?')
+
+
+if __name__ == '__main__':
+    dp.run_polling(bot)
