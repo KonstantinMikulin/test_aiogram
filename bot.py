@@ -3,6 +3,7 @@ import random
 from aiogram import Bot, Dispatcher, F
 from aiogram.filters import Command, CommandStart
 from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup, Message
+from aiogram.exceptions import TelegramBadRequest
 
 import config
 
@@ -72,11 +73,10 @@ async def process_more_press(callback: CallbackQuery):
     )]]
     markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
 
-    await callback.answer()
-    await callback.message.edit_text(
-        text=jokes[random_jokes()],
-        reply_markup=markup
-    )
+    try:
+        await callback.message.edit_text(text=jokes[random_jokes()], reply_markup=markup)
+    except TelegramBadRequest:
+        await callback.answer()
 
 
 @dp.message()
