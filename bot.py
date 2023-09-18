@@ -22,7 +22,7 @@ LEXICON: dict[str, str] = {
     'voice': '📢 Голосовое сообщение',
     'text_1': 'Это обыкновенное текстовое сообщение, его можно легко отредактировать другим текстовым сообщением,'
               'но нельзя отредактировать сообщением с медиа.',
-    'text_2': 'Это тоже обыкновенное текстовое сообщение, которое можно заменить на другое текстовое сообщение через'
+    'text_2': 'Это тоже обыкновенное текстовое сообщение, которое можно заменить на другое текстовое сообщение через '
               'редактирование.',
     'photo_id1': config.photos[0],
     'photo_id2': config.photos[1],
@@ -34,7 +34,7 @@ LEXICON: dict[str, str] = {
     'document_id2': config.documents[1],
     'video_id1': config.videos[0],
     'video_id2': config.videos[1]
-    }
+}
 
 
 def get_markup(width: int, *args, **kwargs) -> InlineKeyboardMarkup:
@@ -58,14 +58,25 @@ def get_markup(width: int, *args, **kwargs) -> InlineKeyboardMarkup:
     return kb_builder.as_markup()
 
 
+@dp.message(CommandStart())
 async def process_start_cmd(message: Message):
-    pass
+    markup = get_markup(2, 'text')
+
+    await message.answer(text=LEXICON['text_1'],
+                         reply_markup=markup)
 
 
 @dp.callback_query(F.data.in_(
-    [['text', 'audio', 'video', 'document', 'photo', 'voice']]))
+    ['text', 'audio', 'video', 'document', 'photo', 'voice']))
 async def process_button_press(callback: CallbackQuery, bot: Bot):
-    pass
+    markup = get_markup(2, 'text')
+
+    if callback.message.text == LEXICON['text_1']:
+        text = LEXICON['text_2']
+    else:
+        text = LEXICON['text_1']
+
+    await callback.message.edit_text(text=text, reply_markup=markup)
 
 
 @dp.message()
@@ -75,3 +86,6 @@ async def send_echo(message: Message):
 
 if __name__ == '__main__':
     dp.run_polling(bot)
+
+
+

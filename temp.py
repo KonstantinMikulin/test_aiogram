@@ -1,35 +1,13 @@
-import os
-import sys
-
-BOOK_PATH = 'book/book.txt'
-PAGE_SIZE = 1050
-
-book: dict[int, str] = {}
-
-
-def _get_part_text(text: str, start: int, size: int) -> tuple[str, int]:
-        end_signs = ',.!:;?'
-        counter = 0
-        end = start + size
-
-        if len(text) < end:
-            size = len(text) - start
-            text = text[start:end]
-        else:
-            if text[end] == '.' and text[end - 1] in end_signs:
-                text = text[start:end - 2]
-                size -= 2
-            else:
-                text = text[start:end]
-            for i in range(size - 1, 0, -1):
-                if text[i] in end_signs:
-                    break
-                counter = size - i
-        page_text = text[:size - counter]
-        page_size = size - counter
-        return page_text, page_size
-
-
-def prepare_book(path: str) -> None:
-    with open(file=path, mode='r', encoding='utf-8') as file:
-        text = file.read()
+@dp.callback_query(F.data.in_(
+    ['text', 'audio', 'video', 'document', 'photo', 'voice']
+))
+async def process_button_press(callback: CallbackQuery):
+    markup = get_markup(2, 'text')
+    if callback.message.text == LEXICON['text_1']:
+        text = LEXICON['text_2']
+    else:
+        text = LEXICON['text_1']
+    await callback.message.edit_text(
+        text=text,
+        reply_markup=markup
+    )
