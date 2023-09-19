@@ -93,7 +93,7 @@ async def process_age_sent(message: Message, state: FSMContext):
         text='🤷 Пока не ясно',
         callback_data='undefined_gender'
     )
-    keyboard: list[list[InlineKeyboardButton]] = [
+    keyboard = [
         [male_button, female_button],
         [undefined_button]
     ]
@@ -241,7 +241,7 @@ async def warning_not_wish_news(message: Message):
     )
 
 
-# Хендлер для /showdata
+# Хэндлер для /showdata
 @dp.message(Command(commands=['showdata']), StateFilter(default_state))
 async def process_showdata_cmd(message: Message):
     if message.from_user.id in user_dict:
@@ -256,13 +256,13 @@ async def process_showdata_cmd(message: Message):
     else:
         await message.answer(
             text='Вы еще не заполняли анкету. Чтобы приступить - '
-            'отправьте команду /fillform'
+                 'отправьте команду /fillform'
         )
 
 
 # Хэндлер для любых сообщений вне состояний
 @dp.message(StateFilter(default_state))
-async def processs_any_message(message: Message):
+async def process_any_message(message: Message):
     await message.reply(
         text='Say what?'
     )
