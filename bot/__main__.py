@@ -5,8 +5,13 @@ from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 
+from sqlalchemy import text
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
+
 from bot.config import Config, load_config
 from bot.handlers import get_routers
+from bot.db.base import Base
+from bot.middlewares import DbSessionMiddlware
 
 logger = logging.getLogger(__name__)
 
@@ -18,12 +23,32 @@ async def main():
         "%(lineno)d - %(name)s - %(message)s",
     )
     
+    engine = create_async_engine(
+        url="postgresql+psycopg://costa:datatotest@127.0.0.1/test_db",
+        echo=True
+    )
+    
+    # Проверка соединения с СУБД
+    async with engine.begin() as conn:
+        await conn.execute(text('SELECT 1'))
+        
+    # Создание таблиц
+    async with engine.begin() as connection:
+        # Если ловите ошибку "таблица уже существует",
+        # раскомментируйте следующую строку:
+        # await connection.run_sync(Base.metadata.drop_all)
+        await connection.run_sync(Base.metadata.create_all)
+    
     config: Config = load_config() #type:ignore
     bot = Bot(
         token=config.tg_bot.token,
         default=DefaultBotProperties(parse_mode=ParseMode.HTML)
     )
     dp = Dispatcher()
+    
+    # Подключение мидлварей
+    Sessionmaker = async_sessionmaker(engine, expire_on_commit=False)
+    dp.update.outer_middleware(DbSessionMiddlware(Sessionmaker))
     
     dp.include_routers(*get_routers())
     
