@@ -8,6 +8,7 @@ services:
     ports:
       - 127.0.0.1:5432:5432
     environment:
+        #TODO: change all names and pass
       - POSTGRES_USER=costa
       - POSTGRES_PASSWORD=datatotest
       - POSTGRES_DB=test_db
