@@ -11,7 +11,7 @@ from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from bot.config import Config, load_config
 from bot.handlers import get_routers
 from bot.db.base import Base
-from bot.middlewares import DbSessionMiddlware
+from bot.middlewares import DbSessionMiddlware, TrackAllUsersMiddleware
 
 logger = logging.getLogger(__name__)
 
@@ -49,6 +49,7 @@ async def main():
     # Подключение мидлварей
     Sessionmaker = async_sessionmaker(engine, expire_on_commit=False)
     dp.update.outer_middleware(DbSessionMiddlware(Sessionmaker))
+    dp.message.outer_middleware(TrackAllUsersMiddleware())
     
     dp.include_routers(*get_routers())
     
