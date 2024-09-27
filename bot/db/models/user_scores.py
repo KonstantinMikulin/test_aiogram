@@ -19,6 +19,6 @@ class Score(TimestampMixin, Base):
         BigInteger,
         ForeignKey('users.telegram_id', ondelete='CASCADE')
     )
-    number: Mapped[int] = mapped_column(Integer, nullable=False)
+    score: Mapped[int] = mapped_column(Integer, nullable=False)
     
     user: Mapped["User"] = relationship(back_populates='scores')  # noqa: F821

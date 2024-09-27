@@ -1,7 +1,7 @@
 from sqlalchemy.dialects.postgresql import insert as upsert
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from bot.db.models import User
+from bot.db.models import User, Score
 
 
 async def upsert_user(
@@ -26,4 +26,17 @@ async def upsert_user(
     )
     
     await session.execute(stmt)
+    await session.commit()
+
+
+async def add_score(
+    session: AsyncSession,
+    telegram_id: int,
+    score: int
+):
+    new_score = Score(
+        user_id=telegram_id,
+        score=score
+    )
+    session.add(new_score)
     await session.commit()
