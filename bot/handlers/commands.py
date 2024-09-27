@@ -6,7 +6,7 @@ from aiogram.types import Message
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from bot.db.requests import add_score
+from bot.db.requests import add_score, get_total_score_for_user
 
 router = Router(name='comands router')
 
@@ -26,3 +26,13 @@ async def score_cmd(message: Message, session: AsyncSession):
         score=score
     )
     await message.answer(f"You got {score}")
+
+
+@router.message(Command('stats'))
+async def stats_cmd(message: Message, session: AsyncSession):
+    total_score: int = await get_total_score_for_user(
+        session=session,
+        telegram_id=message.from_user.id #type:ignore
+    )
+    
+    await message.answer(f"Your total score is {total_score}")

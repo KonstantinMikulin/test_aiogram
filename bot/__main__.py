@@ -36,7 +36,7 @@ async def main():
     async with engine.begin() as connection:
         # Если ловите ошибку "таблица уже существует",
         # раскомментируйте следующую строку:
-        await connection.run_sync(Base.metadata.drop_all)
+        # await connection.run_sync(Base.metadata.drop_all)
         await connection.run_sync(Base.metadata.create_all)
     
     config: Config = load_config() #type:ignore
