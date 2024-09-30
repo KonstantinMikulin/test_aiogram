@@ -4,8 +4,6 @@ from aiogram_dialog import Dialog, Window, DialogManager
 from aiogram_dialog.widgets.text import Const
 from aiogram_dialog.widgets.input import TextInput, ManagedTextInput
 
-from sqlalchemy.ext.asyncio import AsyncSession
-
 from bot.db.requests import add_score
 from .states import ScoreSG
 
@@ -22,11 +20,9 @@ async def score_fill_correct(
     message: Message,
     widget: ManagedTextInput,
     dialog_manager: DialogManager,
-    text: str,
-    # session: AsyncSession
+    text: str
 ):
     score = int(text)
-    
     session = dialog_manager.middleware_data.get("session")
     
     await add_score(

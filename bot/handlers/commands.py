@@ -30,15 +30,6 @@ async def score_cmd(
         mode=StartMode.RESET_STACK,
         show_mode=ShowMode.DELETE_AND_SEND
     )
-    
-    # score = randint(1, 100)
-    
-    # await add_score(
-    #     session=session,
-    #     telegram_id=message.from_user.id, #type:ignore
-    #     score=score
-    # )
-    # await message.answer(f"You got {score}")
 
 
 @router.message(Command('stats'))
