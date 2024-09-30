@@ -14,7 +14,7 @@ from bot.config import Config, load_config
 from bot.handlers import get_routers
 from bot.db.base import Base
 from bot.middlewares import DbSessionMiddlware, TrackAllUsersMiddleware
-from bot.dialogs import score_dialog
+from bot.dialogs import score_dialog, stats_dialog
 
 logger = logging.getLogger(__name__)
 
@@ -56,6 +56,7 @@ async def main():
     
     dp.include_routers(*get_routers())
     dp.include_router(score_dialog)
+    dp.include_router(stats_dialog)
     
     setup_dialogs(dp)
     
