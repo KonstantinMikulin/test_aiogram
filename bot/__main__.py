@@ -5,6 +5,8 @@ from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 
+from aiogram_dialog import setup_dialogs
+
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 
@@ -12,6 +14,7 @@ from bot.config import Config, load_config
 from bot.handlers import get_routers
 from bot.db.base import Base
 from bot.middlewares import DbSessionMiddlware, TrackAllUsersMiddleware
+from bot.dialogs import score_dialog
 
 logger = logging.getLogger(__name__)
 
@@ -52,6 +55,9 @@ async def main():
     dp.message.outer_middleware(TrackAllUsersMiddleware())
     
     dp.include_routers(*get_routers())
+    dp.include_router(score_dialog)
+    
+    setup_dialogs(dp)
     
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)

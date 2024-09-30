@@ -39,7 +39,7 @@ async def add_score(
     score: int
 ):
     """
-    Add score (random int)
+    Add score
     """
     new_score = Score(
         user_id=telegram_id,
@@ -62,4 +62,4 @@ async def get_total_score_for_user(
         options=[selectinload(User.scores)]
     )
     
-    return sum(item.score for item in user.scores)
+    return sum(item.score for item in user.scores) #type:ignore
