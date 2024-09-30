@@ -4,9 +4,6 @@ from aiogram.types import Message
 
 from aiogram_dialog import DialogManager, StartMode, ShowMode
 
-from sqlalchemy.ext.asyncio import AsyncSession
-
-from bot.db.requests import get_total_score_for_user
 from bot.dialogs import ScoreSG, StatsSG
 
 router = Router(name='comands router')
@@ -35,4 +32,11 @@ async def stats_cmd(message: Message, dialog_manager: DialogManager):
         state=StatsSG.get_stats,
         mode=StartMode.RESET_STACK,
         show_mode=ShowMode.DELETE_AND_SEND
+    )
+
+
+@router.message(Command('deletme'))
+async def delete_user_cmd(message: Message, dialog_manager: DialogManager):
+    await dialog_manager.start(
+        state=
     )
